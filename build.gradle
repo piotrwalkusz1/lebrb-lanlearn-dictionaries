@@ -1,0 +1,40 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.ryanharter.gradle-git-repo:gradle-plugin:1.0.1'
+	}
+}
+
+apply plugin: 'git-repo'
+apply plugin: 'maven'
+apply plugin: 'java-library'
+
+group = 'com.piotrwalkusz.lebrb'
+version = '1.1.0'
+sourceCompatibility = 1.8
+
+
+repositories {
+	mavenCentral()
+    maven { url "https://raw.githubusercontent.com/piotrwalkusz1/lebrb-repository/master/releases" }
+    maven { url "https://raw.githubusercontent.com/piotrwalkusz1/lebrb-repository/master/snapshots" }
+}
+
+
+dependencies {
+	api('org.springframework.boot:spring-boot-starter-data-mongodb:1.5.10.RELEASE')
+    api(group: 'com.piotrwalkusz.lebrb', name: 'lebrb-lanlearn', version: '1.0.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-nop'
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'git@github.com:piotrwalkusz1/lebrb-repository.git/releases')
+            snapshotRepository(url: 'git@github.com:piotrwalkusz1/lebrb-repository.git/snapshots')
+        }
+    }
+}
